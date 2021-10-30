@@ -1103,16 +1103,16 @@ func NewFs(name, path string, m configmap.Mapper) (fs.Fs, error) {
 	//-----------------------------------------------------------
 	maybeIsFile := false
 	// 添加  {id} 作为根目录功能
-	if(path != "" && path[0:1] == "{"){
+	if path != "" && path[0:1] == "{" {
 		idIndex := strings.Index(path,"}")
-		if(idIndex > 0){
+		if idIndex > 0 {
 			RootId := path[1:idIndex];
 			name += RootId
 			//opt.ServerSideAcrossConfigs = true
-			if(len(RootId) == 33){
+			if len(RootId) == 33 {
 				maybeIsFile = true
 				opt.RootFolderID = RootId;
-			}else{
+			} else {
 				opt.RootFolderID = RootId;
 				opt.TeamDriveID = RootId;
 			}
@@ -1214,11 +1214,11 @@ func NewFs(name, path string, m configmap.Mapper) (fs.Fs, error) {
 		return nil, err
 	}
 	//------------------------------------------------------
-	if(maybeIsFile){
-		file,err := f.svc.Files.Get(opt.RootFolderID).Fields("name","id","size","mimeType").SupportsAllDrives(true).Do()
-		if err == nil{
+	if maybeIsFile {
+		file, err := f.svc.Files.Get(opt.RootFolderID).Fields(partialFields).SupportsAllDrives(true).Do()
+		if err == nil {
 			//fmt.Println("file.MimeType", file.MimeType)
-			if( "application/vnd.google-apps.folder" != file.MimeType && file.MimeType != ""){
+			if "application/vnd.google-apps.folder" != file.MimeType && file.MimeType != "" {
 				tempF := *f
 				newRoot := ""
 				tempF.dirCache = dircache.New(newRoot, f.rootFolderID, &tempF)
