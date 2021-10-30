@@ -9,23 +9,18 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Unshallow
-        run: git fetch --prune --unshallow
-      -
-        name: Set up Go
+        with:
+          fetch-depth: 0
+      - name: Set up Go
         uses: actions/setup-go@v1
         with:
           go-version: 1.13.x
-      -
-        name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v1
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@5df302e5e9e4c66310a6b6493a8865b12c555af2
         with:
           version: latest
-          args: release --rm-dist
-          key: ${{ secrets.YOUR_PRIVATE_KEY }}
+          args: --rm-dist --skip-validate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
